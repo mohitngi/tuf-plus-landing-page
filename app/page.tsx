@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { ArrowRight, CheckCircle, Star, BookOpen, Target, Code, Database, Brain, Lightbulb } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -10,18 +11,80 @@ import { AnimatedStats } from "@/components/animated-stats"
 import { InteractiveFeatureShowcase } from "@/components/interactive-feature-showcase"
 
 export default function TakeUForwardPlusLanding() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 9,
+    minutes: 1,
+    seconds: 0
+  })
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+    
+    // Set default target date (9 hours and 1 minute from now)
+    let targetDate = new Date()
+    targetDate.setHours(targetDate.getHours() + 9)
+    targetDate.setMinutes(targetDate.getMinutes() + 1)
+    targetDate.setSeconds(targetDate.getSeconds() + 0)
+    
+    // Only run localStorage logic on client side
+    if (typeof window !== 'undefined') {
+      // Get or set the target date from localStorage
+      const storedTarget = localStorage.getItem('countdownTarget')
+      
+      if (storedTarget) {
+        const storedDate = new Date(parseInt(storedTarget))
+        // If the stored target has passed, reset it
+        if (storedDate.getTime() <= Date.now()) {
+          localStorage.setItem('countdownTarget', targetDate.getTime().toString())
+        } else {
+          targetDate = storedDate
+        }
+      } else {
+        // First time: set the target date
+        localStorage.setItem('countdownTarget', targetDate.getTime().toString())
+      }
+    }
+
+    const timer = setInterval(() => {
+      const now = new Date().getTime()
+      const distance = targetDate.getTime() - now
+
+      if (distance > 0) {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
+        setTimeLeft({ days, hours, minutes, seconds })
+      } else {
+        // Reset timer when it reaches zero (9 hours and 1 minute)
+        const newTargetDate = new Date()
+        newTargetDate.setHours(newTargetDate.getHours() + 9)
+        newTargetDate.setMinutes(newTargetDate.getMinutes() + 1)
+        targetDate = newTargetDate
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('countdownTarget', targetDate.getTime().toString())
+        }
+      }
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       {/* Promo Banner */}
       <div className="bg-gradient-to-r from-orange-600 to-red-600 text-center py-3 px-4">
-        <div className="flex items-center justify-center gap-4 text-sm font-medium">
-          <span>🔥 Use Code "PAYDAY" - Lifetime Access Won't Last Forever</span>
-          <div className="flex items-center gap-2">
-            <span className="bg-white/20 px-2 py-1 rounded">0 DAYS</span>
-            <span className="bg-white/20 px-2 py-1 rounded">17 HOURS</span>
-            <span className="bg-white/20 px-2 py-1 rounded">53 MINUTES</span>
+                  <div className="flex items-center justify-center gap-4 text-sm font-medium">
+            <span>🔥 Use Code "PAYDAY" - Lifetime Access Won't Last Forever</span>
+            <div className="flex items-center gap-2">
+              <span className="bg-white/20 px-2 py-1 rounded font-mono">{isClient ? timeLeft.hours.toString().padStart(2, '0') : '09'} HOURS</span>
+              <span className="bg-white/20 px-2 py-1 rounded font-mono">{isClient ? timeLeft.minutes.toString().padStart(2, '0') : '01'} MINUTES</span>
+              <span className="bg-white/20 px-2 py-1 rounded font-mono">{isClient ? timeLeft.seconds.toString().padStart(2, '0') : '00'} SECONDS</span>
+            </div>
           </div>
-        </div>
       </div>
 
       {/* Navigation */}

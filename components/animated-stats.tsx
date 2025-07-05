@@ -16,6 +16,7 @@ interface StatItem {
 export function AnimatedStats() {
   const [isVisible, setIsVisible] = useState(false)
   const [animatedValues, setAnimatedValues] = useState([0, 0, 0, 0])
+  const [isClient, setIsClient] = useState(false)
 
   const stats: StatItem[] = [
     {
@@ -49,6 +50,8 @@ export function AnimatedStats() {
   ]
 
   useEffect(() => {
+    setIsClient(true)
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -101,7 +104,11 @@ export function AnimatedStats() {
           <div className={`${stat.color} group-hover:scale-110 transition-transform duration-300`}>{stat.icon}</div>
           <div>
             <div className="text-white font-semibold">
-              {index < 2 ? animatedValues[index].toFixed(index === 1 ? 1 : 0) : Math.floor(animatedValues[index])}
+              {isClient ? (
+                index < 2 ? animatedValues[index].toFixed(index === 1 ? 1 : 0) : Math.floor(animatedValues[index])
+              ) : (
+                index < 2 ? stat.value.toFixed(index === 1 ? 1 : 0) : Math.floor(stat.value)
+              )}
               {stat.suffix}
             </div>
             <div className="text-slate-300 text-sm">{stat.label}</div>
