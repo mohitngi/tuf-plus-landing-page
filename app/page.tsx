@@ -531,16 +531,16 @@ export default function TakeUForwardPlusLanding() {
             </Card>
 
             {/* Plus Plan */}
-            <Card className="bg-gradient-to-b from-orange-600/20 to-red-600/20 border-orange-600/50 relative hover:scale-105 transition-all duration-300">
+            <Card className="bg-slate-800/80 border-orange-500/30 relative hover:scale-105 transition-all duration-300">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-gradient-to-r from-orange-600 to-red-600 text-white px-4 py-1">Most Popular</Badge>
+                <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 font-medium">Most Popular</Badge>
               </div>
               <CardHeader>
-                <CardTitle className="text-white">PLUS</CardTitle>
-                <CardDescription className="text-slate-300">Everything you need to succeed</CardDescription>
+                <CardTitle className="text-white font-bold">PLUS</CardTitle>
+                <CardDescription className="text-slate-200">Everything you need to succeed</CardDescription>
                 <div className="text-3xl font-bold text-white">
-                  $99<span className="text-lg font-normal line-through text-slate-400">$299</span>
-                  <span className="text-lg font-normal">/lifetime</span>
+                  $99<span className="text-lg font-normal line-through text-slate-500">$299</span>
+                  <span className="text-lg font-normal text-slate-200">/lifetime</span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -555,13 +555,13 @@ export default function TakeUForwardPlusLanding() {
                     "Progress analytics",
                     "Lifetime updates",
                   ].map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2 text-slate-300">
+                    <li key={index} className="flex items-center gap-2 text-slate-200">
                       <CheckCircle className="h-4 w-4 text-green-400" />
                       {feature}
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white">
+                <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold">
                   Get PLUS Now
                 </Button>
               </CardContent>
